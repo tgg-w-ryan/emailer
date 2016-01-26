@@ -6,12 +6,12 @@ Created on Mon Jan 25 17:40:30 2016
 """
 
 import smtplib
-
+import getpass
 
 print("Username")
 gm_username = input()
 print("Password")
-gm_pass = input()
+gm_pass = getpass.getpass(prompt='Password')
 
 session = smtplib.SMTP('smtp.gmail.com', 587)
 session.ehlo()
