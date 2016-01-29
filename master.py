@@ -254,22 +254,48 @@ for i in range(0,len(email_lol)):
 
 #%% Pull out the email addresses which worked
 
-#Check for invalid domain's indexes
-invalid_domains = [i for i,x in enumerate(email_results) if x == 'Invalid domain, cannot check']
+#Check for invalid domains or those with multiple addresses found, they will be excluded
+email_list_status = []
+for i in range(0,len(email_results)):
+    if email_results[i].count('Y') == 1:
+        email_list_status.append('One match')
+    elif email_results[i] == 'Invalid domain, cannot check':
+        email_list_status.append('Invalid')
+    elif email_results[i].count('Y') > 1:
+        email_list_status.append('Multiple matches')
+    elif email_results[i].count('Y') == 0:
+        email_list_status.append('No match but valid')
+    else:
+        email_list_status.append('Error')
 
+#Check for invalid domain's indexes
+invalid_domains = [i for i,x in enumerate(email_list_status) if x == 'Invalid']
+
+single_matches = [i for i,x in enumerate(email_list_status) if x == 'One match']
+
+multiple_matches = [i for i,x in enumerate(email_list_status) if x == 'Multiple matches']
+
+no_matches = [i for i,x in enumerate(email_list_status) if x == 'No match but valid']
 
 #Create list of working email addresses
 working_emails = []
 
 for i in range(0,len(email_results)):
     if i in invalid_domains:
-        working_emails.append('Could not find')
-    else:
+        working_emails.append('ERROR: Invalid domain')
+    elif i in multiple_matches:
+        working_emails.append('ERROR: Multiple matches')
+    elif i in no_matches:
+        working_emails.append('ERROR: No matches')
+    elif i in single_matches:
         for u in range(0,len(email_results[i])):
             if email_results[i][u] == 'N':
                 1
             else:
                working_emails.append(email_lol[i][u])
+    else: 
+        working_emails.append('ERROR: Last step failed')
+       
         
 
 
