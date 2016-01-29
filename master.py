@@ -60,10 +60,9 @@ for entry in range(1,len(dog_list)):
     facts.append(dog_list[entry][0])
 
 
-#%% Generate potential email structures
+#%% Functions to enerate potential email structures
 
-possible_emails_list = []
-
+#Turna  prefix and suffix into an email
 def emailize(prefix, suffix):
     prefix = str(prefix)
     suffix = str(suffix)
@@ -112,31 +111,20 @@ def gen_prefix(fn, ln):
 #generate email addresses
 def gen_addresses(prefixes, domain):
     results = []
+    #create emails
     for i in range(0,len(prefixes)):
         addy = emailize(prefixes[i], domain)
         results.append(addy)
+    #clear duplicates
+    results = list(set(results))
+    #return list of email addresses
     return(results)
 
-
-
-    #Make combos
-    
-ex_list = ["ccc", "asdasd", "asdasd", "asdasd"]
-
-itertools.combinations(ex_list, 2)
-
-
-
-for i in range(0,len(first_names)):
-    possible_emails_i = []
-    fn = first_names[i]
-    ln = last_names[i]
-    domain = domains[i]
-    co = company_names[i]
-    
-    
-
-
+# Generate the email address for one entry
+def make_addy(fn, ln, domain):
+    prefix = gen_prefix(fn, ln)
+    addresses = gen_addresses(prefix, domain)
+    return(addresses)
 
 
 
@@ -185,9 +173,9 @@ def check_email(prefix, domain_name):
     
     # Assume 250 as Success
     if code == 250:
-    	print('Success')
+    	return('Y')
     else:
-    	print('Bad')
+    	return('N')
      
  
  
