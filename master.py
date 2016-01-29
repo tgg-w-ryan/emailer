@@ -69,11 +69,11 @@ for entry in range(1,len(dog_list)):
     
 def check_email(prefix, domain_name):
     #Create full email address for checking
-    email_address = prefix + "@" + domain_name
+    email_addy = prefix + "@" + domain_name
     
     #Check using Regex that an email meets minimum requirements, throw an error if not
     #This should never be triggered if you're generating the last name/first name combos accurately
-    addressToVerify = email_address
+    addressToVerify = email_addy
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
     
     if match == None:
