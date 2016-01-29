@@ -27,6 +27,18 @@ import smtplib
 os.chdir('C:/Users/w_ryan/emailer/')
 
 
+#%% function for cleaning lists
+
+#Do some cleaning of the imported text to make sure it's lower case with 
+# no whitespace
+def clean_list(dirty_list):
+    for i in range(0,len(dirty_list)):
+        #convert to lowercase
+        dirty_list[i] = dirty_list[i].lower()
+        #strip all whitespace
+        dirty_list[i] = "".join(dirty_list[i].split())
+    return(dirty_list)
+
 
 #%% import email text
 emails_csv = csv.reader(open('email_list.csv'), delimiter=',')
@@ -38,14 +50,19 @@ last_names = []
 domains = []
 company_names = []
 
+#import everything
 for entry in range(1,len(email_list)):
     first_names.append(email_list[entry][0])
     last_names.append(email_list[entry][1])
     domains.append(email_list[entry][2])
     company_names.append(email_list[entry][3])
-    
-    
-    
+
+#Clean everything
+first_names = clean_list(first_names)
+last_names = clean_list(last_names)
+domains = clean_list(domains)
+company_names = clean_list(company_names)
+
     
 #%%
 
@@ -125,7 +142,6 @@ def make_addy(fn, ln, domain):
     prefix = gen_prefix(fn, ln)
     addresses = gen_addresses(prefix, domain)
     return(addresses)
-
 
 
 #%% Test potential email structures
