@@ -79,6 +79,7 @@ for entry in range(1,len(dog_list)):
 
 #%% Functions to enerate potential email structures
 
+
 #Turna  prefix and suffix into an email
 def emailize(prefix, suffix):
     prefix = str(prefix)
@@ -111,6 +112,7 @@ def bckfwd(first, second):
 def gen_prefix(fn, ln):
     #create list to store results
     results = []
+    new_res = []
     #Get initials
     fi = fn[:1]
     li = ln[:1]
@@ -123,7 +125,13 @@ def gen_prefix(fn, ln):
     results.append(fi)
     results.append(ln)
     results.append(li)
-    return([item for sublist in results for item in sublist])
+    #get rid of nested lists
+    new_res = results[0] + results[1] + results[2] + results[3]
+    new_res.append(results[4])
+    new_res.append(results[5])
+    new_res.append(results[6])
+    new_res.append(results[7])
+    return(new_res)
 
 #generate email addresses
 def gen_addresses(prefixes, domain):
@@ -133,7 +141,7 @@ def gen_addresses(prefixes, domain):
         addy = emailize(prefixes[i], domain)
         results.append(addy)
     #clear duplicates
-    results = list(set(results))
+    results = list(uniqify_list(results))
     #return list of email addresses
     return(results)
 
@@ -143,34 +151,28 @@ def make_addy(fn, ln, domain):
     addresses = gen_addresses(prefix, domain)
     return(addresses)
 
-
-#%% Test potential email structures
-
-#check initial email address
-    domain_name = 'emailhippo.com'
-    prefix = 'info'
-    
-def check_email(prefix, domain_name):
-    #Create full email address for checking
-    email_addy = prefix + "@" + domain_name
-    
-    #Step 1
+#Check if an email address exists
+def ping_email(email_address):
+    #Step 1: Check email
     #Check using Regex that an email meets minimum requirements, throw an error if not
     #This should never be triggered if you're generating the last name/first name combos accurately
-    addressToVerify = email_addy
+    addressToVerify = email_address
     match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
     
     if match == None:
-    	print('Bad Syntax')
+    	print('Bad Syntax in ' + addressToVerify)
     	raise ValueError('Bad Syntax')
     
-    #Step 2
+    #Step 2: Getting MX record
+    #Pull domain name from email address
+    domain_name = email_address.split('@')[1]
+    
     #get the MX record for the domain
     records = dns.resolver.query(domain_name, 'MX')
     mxRecord = records[0].exchange
     mxRecord = str(mxRecord)
     
-    #Step 3
+    #Step 3: ping email server
     #check if the email address exists
     
     # Get local server hostname
@@ -193,9 +195,9 @@ def check_email(prefix, domain_name):
     else:
     	return('N')
      
- 
- 
- 
+addy_list = make_addy('will', 'ryan', 'advoclik.com')
+
+
 
 #%% Start email client
 
