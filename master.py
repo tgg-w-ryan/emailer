@@ -71,6 +71,7 @@ def check_email(prefix, domain_name):
     #Create full email address for checking
     email_addy = prefix + "@" + domain_name
     
+    #Step 1
     #Check using Regex that an email meets minimum requirements, throw an error if not
     #This should never be triggered if you're generating the last name/first name combos accurately
     addressToVerify = email_addy
@@ -80,12 +81,15 @@ def check_email(prefix, domain_name):
     	print('Bad Syntax')
     	raise ValueError('Bad Syntax')
     
+    #Step 2
     #get the MX record for the domain
     records = dns.resolver.query(domain_name, 'MX')
     mxRecord = records[0].exchange
     mxRecord = str(mxRecord)
     
+    #Step 3
     #check if the email address exists
+    
     # Get local server hostname
     host = socket.gethostname()
     
@@ -109,16 +113,18 @@ def check_email(prefix, domain_name):
  
  
  
+ 
+ 
 
 #%% Start email client
 
-
-# Script to send emails
+# get username and pass
 print("Username")
 gm_username = "fundogfacts4you@gmail.com"
 print("Password")
 gm_pass = "Freako312"
 
+#send stuff
 session = smtplib.SMTP('smtp.gmail.com', 587)
 session.ehlo()
 session.starttls()
