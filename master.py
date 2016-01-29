@@ -66,8 +66,14 @@ for entry in range(1,len(dog_list)):
 #check initial email address
 
 
+#Define variables for testing
+domain_name = 'emailhippo.com'
+prefix = 'info'
+email_address = prefix + "@" + domain_name
+
 #Check using Regex that an email meets minimum requirements, throw an error if not
-addressToVerify ='info@emailhippo.com'
+#This should never be triggered if you're generating the last name/first name combos accurately
+addressToVerify = email_address
 match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
 
 if match == None:
@@ -75,7 +81,7 @@ if match == None:
 	raise ValueError('Bad Syntax')
 
 #get the MX record for the domain
-records = dns.resolver.query('emailhippo.com', 'MX')
+records = dns.resolver.query(domain_name, 'MX')
 mxRecord = records[0].exchange
 mxRecord = str(mxRecord)
 
