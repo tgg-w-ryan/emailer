@@ -63,7 +63,7 @@ last_names = clean_list(last_names)
 domains = clean_list(domains)
 company_names = clean_list(company_names)
 
-#%% Functions to enerate potential email structures
+#%% Functions to generate potential email structures
 
 
 #Turna  prefix and suffix into an email
@@ -137,6 +137,9 @@ def make_addy(fn, ln, domain):
     addresses = gen_addresses(prefix, domain)
     return(addresses)
 
+
+
+#%% Functions to check domains and emails
 
 #Check if a domain always returns 250 basically no matter what
 def check_domain(domain_name):
@@ -249,9 +252,25 @@ for i in range(0,len(email_lol)):
         email_results.append('Invalid domain, cannot check')
 
 
-#%%
+#%% Pull out the email addresses which worked
+
+#Check for invalid domain's indexes
+invalid_domains = [i for i,x in enumerate(email_results) if x == 'Invalid domain, cannot check']
 
 
+#Create list of working email addresses
+working_emails = []
+
+for i in range(0,len(email_results)):
+    if i in invalid_domains:
+        working_emails.append('Could not find')
+    else:
+        for u in range(0,len(email_results[i])):
+            if email_results[i][u] == 'N':
+                1
+            else:
+               working_emails.append(email_lol[i][u])
+        
 
 
 
