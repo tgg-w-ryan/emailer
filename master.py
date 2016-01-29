@@ -5,10 +5,23 @@ Created on Mon Jan 25 17:40:30 2016
 @author: w_ryan
 """
 
+#library to send email addresses
 import smtplib
+
+#library to get passwords
 import getpass
+
+#library to navigate directories
 import os
+
+#library to read CSVs
 import csv
+
+#libraries to check email addresses
+import re
+import dns.resolver
+import socket
+import smtplib
 
 #set directory
 os.chdir('C:/Users/w_ryan/emailer/')
@@ -39,7 +52,57 @@ facts = []
 for entry in range(1,len(dog_list)):
     facts.append(dog_list[entry][0])
 
-    
+
+#%% Generate potential email structures
+
+
+
+
+
+
+
+#%% Test potential email structures
+
+#check initial email address
+
+
+#Check using Regex that an email meets minimum requirements, throw an error if not
+addressToVerify ='info@emailhippo.com'
+match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
+
+if match == None:
+	print('Bad Syntax')
+	raise ValueError('Bad Syntax')
+
+#get the MX record for the domain
+records = dns.resolver.query('emailhippo.com', 'MX')
+mxRecord = records[0].exchange
+mxRecord = str(mxRecord)
+
+#check if the email address exists
+# Get local server hostname
+host = socket.gethostname()
+
+# SMTP lib setup (use debug level for full output)
+server = smtplib.SMTP()
+server.set_debuglevel(0)
+
+# SMTP Conversation
+server.connect(mxRecord)
+server.helo(host)
+server.mail('me@domain.com')
+code, message = server.rcpt(str(addressToVerify))
+server.quit()
+
+# Assume 250 as Success
+if code == 250:
+	print('Success')
+else:
+	print('Bad')
+ 
+ 
+ 
+ 
 
 #%% Start email client
 
