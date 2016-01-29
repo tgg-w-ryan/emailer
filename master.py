@@ -63,20 +63,6 @@ last_names = clean_list(last_names)
 domains = clean_list(domains)
 company_names = clean_list(company_names)
 
-    
-#%%
-
-#Import body text
-dog_csv = csv.reader(open('dog_facts.csv'), delimiter=',')
-
-dog_list = list(dog_csv)
-
-facts = []
-
-for entry in range(1,len(dog_list)):
-    facts.append(dog_list[entry][0])
-
-
 #%% Functions to enerate potential email structures
 
 
@@ -151,6 +137,39 @@ def make_addy(fn, ln, domain):
     addresses = gen_addresses(prefix, domain)
     return(addresses)
 
+
+#Check if a domain always returns 250 basically no matter what
+def check_domain(domain_name):
+    addressToVerify = "qwertyboy98plm@" + domain_name
+    #Step 1: Getting MX record
+    #get the MX record for the domain
+    records = dns.resolver.query(domain_name, 'MX')
+    mxRecord = records[0].exchange
+    mxRecord = str(mxRecord)
+    
+    #Step 2: ping email server
+    #check if the email address exists
+    
+    # Get local server hostname
+    host = socket.gethostname()
+    
+    # SMTP lib setup (use debug level for full output)
+    server = smtplib.SMTP()
+    server.set_debuglevel(0)
+    
+    # SMTP Conversation
+    server.connect(mxRecord)
+    server.helo(host)
+    server.mail('me@domain.com')
+    code, message = server.rcpt(str(addressToVerify))
+    server.quit()
+    
+    # Assume 250 as Success
+    if code == 250:
+    	return('Y')
+    else:
+    	return('N')
+
 #Check if an email address exists
 def ping_email(email_address):
     #Step 1: Check email
@@ -194,8 +213,49 @@ def ping_email(email_address):
     	return('Y')
     else:
     	return('N')
-     
-addy_list = make_addy('will', 'ryan', 'advoclik.com')
+
+#Check all domains
+def check_domains(domains):
+    domain_check = []
+    for i in range(0,len(domains)):
+        domain_check.append(check_domain(domains[i]))
+    return(domain_check)
+
+#Check all emails for a given person
+def check_emails(addresses):
+    email_check = []
+    for i in range(0,len(addresses)):
+        email_check.append(ping_email(addresses[i]))
+    return(email_check)
+
+
+#%% Check all names to find correct emails
+
+#do the domain checks
+domain_checks =  check_domains(domains)
+
+#make a list of all the email address combos
+email_lol = []
+for i in range(0,len(first_names)):
+    address_list = make_addy(first_names[i], last_names[i], domains[i])
+    email_lol.append(address_list)
+
+#Run the email checks for all the email address combos where domains were ok
+email_results = []
+for i in range(0,len(email_lol)):
+    if domain_checks[i] == 'N':
+        email_results.append(check_emails(email_lol[i]))
+    else:
+        email_results.append('Invalid domain, cannot check')
+
+
+#%%
+
+
+
+
+
+
 
 
 
