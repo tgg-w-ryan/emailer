@@ -64,48 +64,48 @@ for entry in range(1,len(dog_list)):
 #%% Test potential email structures
 
 #check initial email address
-
-
-#Define variables for testing
-domain_name = 'emailhippo.com'
-prefix = 'info'
-email_address = prefix + "@" + domain_name
-
-#Check using Regex that an email meets minimum requirements, throw an error if not
-#This should never be triggered if you're generating the last name/first name combos accurately
-addressToVerify = email_address
-match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
-
-if match == None:
-	print('Bad Syntax')
-	raise ValueError('Bad Syntax')
-
-#get the MX record for the domain
-records = dns.resolver.query(domain_name, 'MX')
-mxRecord = records[0].exchange
-mxRecord = str(mxRecord)
-
-#check if the email address exists
-# Get local server hostname
-host = socket.gethostname()
-
-# SMTP lib setup (use debug level for full output)
-server = smtplib.SMTP()
-server.set_debuglevel(0)
-
-# SMTP Conversation
-server.connect(mxRecord)
-server.helo(host)
-server.mail('me@domain.com')
-code, message = server.rcpt(str(addressToVerify))
-server.quit()
-
-# Assume 250 as Success
-if code == 250:
-	print('Success')
-else:
-	print('Bad')
- 
+    domain_name = 'emailhippo.com'
+    prefix = 'info'
+    
+def check_email(prefix, domain_name):
+    #Create full email address for checking
+    email_address = prefix + "@" + domain_name
+    
+    #Check using Regex that an email meets minimum requirements, throw an error if not
+    #This should never be triggered if you're generating the last name/first name combos accurately
+    addressToVerify = email_address
+    match = re.match('^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$', addressToVerify)
+    
+    if match == None:
+    	print('Bad Syntax')
+    	raise ValueError('Bad Syntax')
+    
+    #get the MX record for the domain
+    records = dns.resolver.query(domain_name, 'MX')
+    mxRecord = records[0].exchange
+    mxRecord = str(mxRecord)
+    
+    #check if the email address exists
+    # Get local server hostname
+    host = socket.gethostname()
+    
+    # SMTP lib setup (use debug level for full output)
+    server = smtplib.SMTP()
+    server.set_debuglevel(0)
+    
+    # SMTP Conversation
+    server.connect(mxRecord)
+    server.helo(host)
+    server.mail('me@domain.com')
+    code, message = server.rcpt(str(addressToVerify))
+    server.quit()
+    
+    # Assume 250 as Success
+    if code == 250:
+    	print('Success')
+    else:
+    	print('Bad')
+     
  
  
  
