@@ -33,13 +33,20 @@ emails_csv = csv.reader(open('email_list.csv'), delimiter=',')
 
 email_list = list(emails_csv)
 
-emails = []
-links = []
+first_names = []
+last_names = []
+domains = []
+company_names = []
 
 for entry in range(1,len(email_list)):
-    emails.append(email_list[entry][0])
-    links.append(email_list[entry][1])
-
+    first_names.append(email_list[entry][0])
+    last_names.append(email_list[entry][1])
+    domains.append(email_list[entry][2])
+    company_names.append(email_list[entry][3])
+    
+    
+    
+    
 #%%
 
 #Import body text
@@ -55,7 +62,79 @@ for entry in range(1,len(dog_list)):
 
 #%% Generate potential email structures
 
+possible_emails_list = []
 
+def emailize(prefix, suffix):
+    prefix = str(prefix)
+    suffix = str(suffix)
+    email_str = prefix + '@' + suffix
+    return(email_str)
+    
+#function to get all seperators
+def all_seps(first, second):
+    response_list = []
+    str1 = first + "-" + second
+    str2 = first + "_" + second
+    str3 = first + "." + second
+    str4 = first + second
+    response_list.append(str1)
+    response_list.append(str2)
+    response_list.append(str3)
+    response_list.append(str4)
+    return(response_list)
+
+#function to get all seperators backwards and forwards
+def bckfwd(first, second):
+    response = []
+    response.append(all_seps(first, second))
+    response.append(all_seps(second, first))
+    #return a flattened list
+    return([item for sublist in response for item in sublist])
+
+#function to get all prefixes
+def gen_prefix(fn, ln):
+    #create list to store results
+    results = []
+    #Get initials
+    fi = fn[:1]
+    li = ln[:1]
+    #Generate all possible prefixes
+    results.append(bckfwd(fn, ln))
+    results.append(bckfwd(fn, li))
+    results.append(bckfwd(fi, ln))
+    results.append(bckfwd(fi, li))
+    results.append(fn)
+    results.append(fi)
+    results.append(ln)
+    results.append(li)
+    return([item for sublist in results for item in sublist])
+
+#generate email addresses
+def gen_addresses(prefixes, domain):
+    results = []
+    for i in range(0,len(prefixes)):
+        addy = emailize(prefixes[i], domain)
+        results.append(addy)
+    return(results)
+
+
+
+    #Make combos
+    
+ex_list = ["ccc", "asdasd", "asdasd", "asdasd"]
+
+itertools.combinations(ex_list, 2)
+
+
+
+for i in range(0,len(first_names)):
+    possible_emails_i = []
+    fn = first_names[i]
+    ln = last_names[i]
+    domain = domains[i]
+    co = company_names[i]
+    
+    
 
 
 
@@ -110,8 +189,6 @@ def check_email(prefix, domain_name):
     else:
     	print('Bad')
      
- 
- 
  
  
  
