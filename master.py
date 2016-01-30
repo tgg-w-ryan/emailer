@@ -23,8 +23,6 @@ import dns.resolver
 import socket
 import smtplib
 
-#for making the program wait
-import time
 
 #set directory
 
@@ -185,8 +183,7 @@ def check_domain(domain_name):
     if code == 250:
     	return('Y')
     elif code == 450:
-     return('Rate limited')
-     time.sleep(5)
+     return('Y')
     else:
     	return('N')
 
@@ -232,7 +229,7 @@ def ping_email(email_address):
     if code == 250:
     	return('Y')
     elif code == 450:
-     return('450')
+     return('Y')
     else:
     	return('N')
 
@@ -243,7 +240,6 @@ def check_domains(domains):
     for i in range(0,len(domains)):
         domain_check.append(check_domain(domains[i]))
         #add a pause so as to not get banned
-        time.sleep(1)
     return(domain_check)
 
 #Check all emails for a given person
@@ -253,7 +249,6 @@ def check_emails(addresses):
     for i in range(0,len(addresses)):
         email_check.append(ping_email(addresses[i]))
         #add a pause so as to not get banned
-        time.sleep(1)
     return(email_check)
 
 
@@ -275,11 +270,8 @@ print('Running email checks on all emails')
 email_results = []
 for i in range(0,len(email_lol)):
     if domain_checks[i] == 'N':
-        code = '450'
-        while code == '450': 
-            code = check_emails(email_lol[i])
-            print(code)
-            email_results.append(code)
+        answer = check_emails(email_lol[i])
+        email_results.append(answer)
     else:
         email_results.append('Invalid domain, cannot check')
 
@@ -349,11 +341,6 @@ with open('output.csv', 'w', newline='') as myfile:
     wr.writerow(header)
     for row in zip(first_names, last_names, domains, company_names, working_emails):
         wr.writerow(row)
-
-
-
-
-
 
 
 #==============================================================================
