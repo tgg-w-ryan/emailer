@@ -23,6 +23,8 @@ import dns.resolver
 import socket
 import smtplib
 
+#for making the program wait
+import time
 
 #set directory
 
@@ -80,7 +82,7 @@ for i in range(0,len(domains)):
 #%% Functions to generate potential email structures
 
 
-#Turna  prefix and suffix into an email
+#Turn a  prefix and suffix into an email
 def emailize(prefix, suffix):
     prefix = str(prefix)
     suffix = str(suffix)
@@ -184,6 +186,8 @@ def check_domain(domain_name):
     # Assume 250 as Success
     if code == 250:
     	return('Y')
+    elif code == 450:
+     return('Rate limited')
     else:
     	return('N')
 
@@ -236,6 +240,8 @@ def check_domains(domains):
     domain_check = []
     for i in range(0,len(domains)):
         domain_check.append(check_domain(domains[i]))
+        #add a pause so as to not get banned
+        time.sleep(3)
     return(domain_check)
 
 #Check all emails for a given person
@@ -243,6 +249,8 @@ def check_emails(addresses):
     email_check = []
     for i in range(0,len(addresses)):
         email_check.append(ping_email(addresses[i]))
+        #add a pause so as to not get banned
+        time.sleep(3)
     return(email_check)
 
 
