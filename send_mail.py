@@ -4,6 +4,15 @@ Created on Fri Jan 29 19:52:15 2016
 
 @author: w_ryan
 """
+#%%
+
+#NOTE: YOU CAN ONLY USE THIS SCRIPT FOR PERSONAL EMAILS, NOT COMMERCIAL ONES, AS FAR AS I KNOW
+
+
+
+#%%
+
+
 
 #library to send email addresses
 import smtplib
@@ -39,6 +48,7 @@ first_names = []
 last_names = []
 domains = []
 company_names = []
+working_emails = []
 
 #import everything
 for entry in range(1,len(email_list)):
