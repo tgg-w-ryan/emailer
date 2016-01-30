@@ -23,8 +23,6 @@ import dns.resolver
 import socket
 import smtplib
 
-#for making csvs and other stuff
-import numpy as np
 
 #set directory
 
@@ -300,7 +298,14 @@ for i in range(0,len(email_results)):
     if i in invalid_domains:
         working_emails.append('ERROR: Invalid domain')
     elif i in multiple_matches:
-        working_emails.append('ERROR: Multiple matches')
+        emails_concat = []
+        for u in range(0,len(email_results[i])):
+            
+            if email_results[i][u] == 'N':
+                1
+            else:
+               emails_concat.append(email_lol[i][u])
+        working_emails.append(emails_concat)
     elif i in no_matches:
         working_emails.append('ERROR: No matches')
     elif i in single_matches:
@@ -330,41 +335,43 @@ with open('output.csv', 'w', newline='') as myfile:
 
 
 
-#%% Start email client
-
-# get username and pass
-print("Username")
-gm_username = "fundogfacts4you@gmail.com"
-print("Password")
-gm_pass = "Freako312"
-
-#send stuff
-session = smtplib.SMTP('smtp.gmail.com', 587)
-session.ehlo()
-session.starttls()
-session.login(gm_username, gm_pass)
-
-#%% Send individual emails function
-
-def send(recipient, email_subject, link):
-    
-    body_of_email = "Hi, you have been selected to receive a great link and stuff. Here is your very special link: " + link
-    headers = "\r\n".join(["from: " + gm_username,
-                           "subject: " + email_subject,
-                           "to: " + recipient,
-                           "mime-version: 1.0",
-                           "content-type: text/html"])
-    
-    # body_of_email can be plaintext or html!                    
-    content = headers + "\r\n\r\n" + body_of_email
-    session.sendmail(gm_username, recipient, content)
-    return
-
-
-#%% send the emails
-
-for entry in range(0,len(emails)):
-    send(emails[entry], "Special offer", links[entry])
+#==============================================================================
+# #%% Start email client
+# 
+# # get username and pass
+# print("Username")
+# gm_username = "fundogfacts4you@gmail.com"
+# print("Password")
+# gm_pass = "Freako312"
+# 
+# #send stuff
+# session = smtplib.SMTP('smtp.gmail.com', 587)
+# session.ehlo()
+# session.starttls()
+# session.login(gm_username, gm_pass)
+# 
+# #%% Send individual emails function
+# 
+# def send(recipient, email_subject, link):
+#     
+#     body_of_email = "Hi, you have been selected to receive a great link and stuff. Here is your very special link: " + link
+#     headers = "\r\n".join(["from: " + gm_username,
+#                            "subject: " + email_subject,
+#                            "to: " + recipient,
+#                            "mime-version: 1.0",
+#                            "content-type: text/html"])
+#     
+#     # body_of_email can be plaintext or html!                    
+#     content = headers + "\r\n\r\n" + body_of_email
+#     session.sendmail(gm_username, recipient, content)
+#     return
+# 
+# 
+# #%% send the emails
+# 
+# for entry in range(0,len(emails)):
+#     send(emails[entry], "Special offer", links[entry])
+#==============================================================================
 
 
 
