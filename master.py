@@ -227,15 +227,20 @@ def ping_email(email_address):
     server.mail('me@domain.com')
     code, message = server.rcpt(str(addressToVerify))
     server.quit()
-    
+        
     # Assume 250 as Success
     if code == 250:
     	return('Y')
+    elif code == 450:
+     return('Rate limited')
+     print('RATE LIMITED!')
+     time.sleep(5)
     else:
     	return('N')
 
 #Check all domains
 def check_domains(domains):
+    print('Checking domain')
     domain_check = []
     for i in range(0,len(domains)):
         domain_check.append(check_domain(domains[i]))
@@ -245,6 +250,7 @@ def check_domains(domains):
 
 #Check all emails for a given person
 def check_emails(addresses):
+    print('Checking email addresses')
     email_check = []
     for i in range(0,len(addresses)):
         email_check.append(ping_email(addresses[i]))
@@ -258,6 +264,7 @@ def check_emails(addresses):
 #do the domain checks
 domain_checks =  check_domains(domains)
 
+print('Making list of email addresses')
 #make a list of all the email address combos
 email_lol = []
 for i in range(0,len(first_names)):
@@ -265,6 +272,8 @@ for i in range(0,len(first_names)):
     email_lol.append(address_list)
 
 #Run the email checks for all the email address combos where domains were ok
+
+print('Running email checks on all emails')
 email_results = []
 for i in range(0,len(email_lol)):
     if domain_checks[i] == 'N':
@@ -277,6 +286,9 @@ for i in range(0,len(email_lol)):
 
 #Check for invalid domains or those with multiple addresses found, they will be excluded
 email_list_status = []
+
+print('Adding statuses to emails')
+
 for i in range(0,len(email_results)):
     if email_results[i].count('Y') == 1:
         email_list_status.append('One match')
