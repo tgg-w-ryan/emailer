@@ -142,8 +142,6 @@ def gen_addresses(prefixes, domain):
     for i in range(0,len(prefixes)):
         addy = emailize(prefixes[i], domain)
         results.append(addy)
-    #clear duplicates
-    results = list(uniqify_list(results))
     #return list of email addresses
     return(results)
 
