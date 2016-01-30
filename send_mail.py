@@ -8,7 +8,7 @@ Created on Fri Jan 29 19:52:15 2016
 
 #NOTE: YOU CAN ONLY USE THIS SCRIPT FOR PERSONAL EMAILS, NOT COMMERCIAL ONES, AS FAR AS I KNOW
 
-
+# DONT LOAD IN ANY EMAILS WHICH PEOPLE HAVENT GIVEN YOU W FULL KNOWLEDGE
 
 #%%
 
@@ -40,14 +40,14 @@ os.chdir(working_path)
 
 #%% import email text
 
-emails_csv = csv.reader(open('email_list.csv'), delimiter=',')
+emails_csv = csv.reader(open('output.csv'), delimiter=',')
 
 email_list = list(emails_csv)
 
 first_names = []
 last_names = []
 domains = []
-company_names = []
+companies = []
 working_emails = []
 
 #import everything
@@ -55,7 +55,7 @@ for entry in range(1,len(email_list)):
     first_names.append(email_list[entry][0])
     last_names.append(email_list[entry][1])
     domains.append(email_list[entry][2])
-    company_names.append(email_list[entry][3])
+    companies.append(email_list[entry][3])
     working_emails.append(email_list[entry][4])
 
 
@@ -76,11 +76,11 @@ session.login(gm_username, gm_pass)
 
 #%% Send individual emails function
 
-def send(recipient, email_subject, link):
+def send(sender, recipient, first_name, last_name, subj_insert, body_insert1, body_insert2):
     
-    body_of_email = "Hi, you have been selected to receive a great link and stuff. Here is your very special link: " + link
-    headers = "\r\n".join(["from: " + gm_username,
-                           "subject: " + email_subject,
+    body_of_email = "Hey, <br>" + first_name + ", you have been selected to receive a great link and stuff. I think it will be very helpful for " + body_insert1
+    headers = "\r\n".join(["from: " + sender,
+                           "subject: Tell me more about what you're up to at " + subj_insert + "!",
                            "to: " + recipient,
                            "mime-version: 1.0",
                            "content-type: text/html"])
@@ -93,5 +93,9 @@ def send(recipient, email_subject, link):
 
 #%% send the emails
 
-for entry in range(0,len(emails)):
-    send(emails[entry], "Special offer", links[entry])
+for i in range(0,len(working_emails)):
+    send(gm_username, working_emails[i], first_names[i], last_names[i], companies[i], companies[i], companies[i])
+    
+    
+    
+    
