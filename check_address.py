@@ -23,7 +23,7 @@ import dns.resolver
 import socket
 import smtplib
 
-
+ 
 #set directory
 
 working_path = 'C:/Users/w_ryan/emailer/'
