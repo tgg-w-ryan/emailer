@@ -23,8 +23,15 @@ import dns.resolver
 import socket
 import smtplib
 
+#for making csvs and other stuff
+import numpy as np
+
 #set directory
-os.chdir('C:/Users/w_ryan/emailer/')
+
+working_path = 'C:/Users/w_ryan/emailer/'
+
+
+os.chdir(working_path)
 
 
 #%% function for cleaning lists
@@ -58,11 +65,20 @@ for entry in range(1,len(email_list)):
     company_names.append(email_list[entry][3])
 
 #Clean everything
+
+#turn lower, remove whitespace
 first_names = clean_list(first_names)
 last_names = clean_list(last_names)
 domains = clean_list(domains)
 company_names = clean_list(company_names)
 
+#get rid of leading "www"s in domain names
+for i in range(0,len(domains)):
+    if 'www.' in domains[i]:
+        domains[i] = domains[i].split('www.')[1]
+    else:
+        1
+        
 #%% Functions to generate potential email structures
 
 
@@ -296,7 +312,17 @@ for i in range(0,len(email_results)):
     else: 
         working_emails.append('ERROR: Last step failed')
        
-        
+
+#%% Write results to a new CSV
+
+header = ('First', 'Last', 'Domain', 'Company', 'Email')
+output_list = [first_names, last_names, domains, company_names, working_emails]
+      
+with open('output.csv', 'w', newline='') as myfile:
+    wr = csv.writer(myfile, delimiter=',')
+    wr.writerow(header)
+    for row in zip(first_names, last_names, domains, company_names, working_emails):
+        wr.writerow(row)
 
 
 
