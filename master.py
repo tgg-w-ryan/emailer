@@ -188,6 +188,7 @@ def check_domain(domain_name):
     	return('Y')
     elif code == 450:
      return('Rate limited')
+     time.sleep(5)
     else:
     	return('N')
 
